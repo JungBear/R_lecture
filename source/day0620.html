@@ -12,7 +12,7 @@
 
 <meta name="date" content="2022-06-20" />
 
-<title>day0620</title>
+<title>Day-2 R DataFrame</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -362,7 +362,7 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">day0620</h1>
+<h1 class="title toc-ignore">Day-2 R DataFrame</h1>
 <h4 class="date">2022-06-20</h4>
 
 </div>
@@ -532,6 +532,60 @@ c</code></pre>
 ## 
 ## [[2]]
 ## [1] 1 2</code></pre>
+</div>
+</div>
+<div id="data-내보내기-불러오기" class="section level2">
+<h2>Data 내보내기, 불러오기</h2>
+<ul>
+<li>현재 있는 dir확인</li>
+</ul>
+<pre class="r"><code>getwd() </code></pre>
+<pre><code>## [1] &quot;C:/Users/human/Desktop/R_lecture/source&quot;</code></pre>
+<ul>
+<li>내보내기(x = data.frame or matrix만 가능)</li>
+</ul>
+<pre class="r"><code>write.csv(x = exam, file = &quot;파일명&quot;)</code></pre>
+<ul>
+<li>불러오기</li>
+</ul>
+<pre class="r"><code>exam = read.csv(&quot;파일명&quot;)</code></pre>
+<ul>
+<li>주의사항 : 경로를 항상 주의하기</li>
+<li>exam은 예시</li>
+</ul>
+<div id="엑셀파일-불러오기" class="section level3">
+<h3>엑셀파일 불러오기</h3>
+<ul>
+<li>패키지 “readxl” 설치해야함</li>
+<li>명령어 : read_excel()</li>
+<li>read_excel(“파일명”,sheet=n) : 파일명을 가진 엑셀에서 n번째 시트
+불러오기</li>
+</ul>
+</div>
+<div id="txt파일-불러오기" class="section level3">
+<h3>txt파일 불러오기</h3>
+<ul>
+<li>명령어 : read.table()</li>
+<li>tap, ; , “,”로 구분된 파일이 각각있다.</li>
+<li>tap : read.table()</li>
+<li>ta</li>
+</ul>
+</div>
+<div id="spss파일-불러오기" class="section level3">
+<h3>spss파일 불러오기</h3>
+<ul>
+<li>패키지 “foreign” 설치해아함</li>
+<li>명령어 : read.spss()</li>
+<li>list 형식으로 넘어와서 형변환을 해줘야한다.</li>
+<li>명령어 : as.data.frame()</li>
+</ul>
+</div>
+<div id="실무패키지" class="section level3">
+<h3>실무패키지</h3>
+<ul>
+<li>데이터가 많을땐 read.csv() -&gt; fread()</li>
+<li>fread()는 data.table 패키지에 있다.</li>
+</ul>
 </div>
 </div>
 

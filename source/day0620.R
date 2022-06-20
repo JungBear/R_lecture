@@ -61,6 +61,41 @@ class(exam$sex)
 
 str(exam)
 
+# 데이터 내보내기
+getwd()
+write.csv(x = exam, file = "temp.csv")
+# 데이터 불러오기
 
 
-  
+exam = read.csv("exam.csv")
+exam
+
+library(ggplot2)
+economics = ggplot2::economics
+
+#실무패키지
+install.packages("data.table")
+library(data.table)
+fread()
+
+#엑셀파일 불러오기기
+ 
+install.packages("readxl")
+library(readxl)
+
+read_excel("student_xl.xlsx")
+
+#엑셀파일에 있는 복수의 시트에서 특정 시트 불러오기
+read_excel("student1_xl.xlsx")
+read_excel("student1_xl.xlsx", sheet=2)
+
+#spss파일 불러오기
+install.packages("foreign")
+library(foreign)
+student = read.spss("student.sav")
+as.data.frame(student)
+
+#txt 파일 불러오기
+read.table("student1.txt")
+read.table("student2.txt", sep=";")
+read.table("student3.txt", sep=",")
