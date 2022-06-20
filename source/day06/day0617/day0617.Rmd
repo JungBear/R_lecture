@@ -1,0 +1,29 @@
+---
+title: "Day-1 visualization"
+output:
+  html_document:
+    keep_md: true
+date: '2022-06-17'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## ggplot2 시각화
+- 다음과 같이 시각화를 작성
+```{r}
+library(ggplot2)
+ggplot(data = iris, aes(x = Sepal.Length, 
+                        y = Sepal.Width)) + 
+  geom_point()
+
+```
+
+## Blog에 이미지 올리기
+- Rmd원본 파일있는 곳에 같은이름의 폴더가 존재
+- 들어가면 figure폴더 안에 이미지파일 복사
+- Blog/source/images에 붙혀넣기
+- 파이참 실행 후 images폴더 아래 이미지를 우클릭 -> copy path 복사 후 이미지 경로에 붙혀 넣은 후 source 지우기
+
+ 
