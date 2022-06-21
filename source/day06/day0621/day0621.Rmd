@@ -87,7 +87,7 @@ mpg1 %>% group_by(trans, drv) %>%
 ```
 ```{r}
 #분류 집단별 데이터 빈도 구하기
-library(dplyr)
+
 mpg1 %>%
   group_by(trans, drv) %>%
   summarise(n=n(),         # count를 써도된다 = count()

@@ -123,5 +123,13 @@ mpg1 %>%
          pct=n/total*100)# trans 범주별 비율 구하기
     
 
+library(ggplot2)
+data()
+data('diamonds')
+diamonds %>% 
+  group_by(cut) %>%
+  summarise(cut_avg=mean(price)) 
+
+
 
 
