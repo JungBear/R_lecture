@@ -449,6 +449,137 @@ prop.table(b, margin = 1) #행의 합이 1이 되도록</code></pre>
 <pre><code>## 
 ##   auto manual 
 ## 0.6709 0.3291</code></pre>
+<pre class="r"><code>str(mpg1)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    234 obs. of  5 variables:
+##  $ manufacturer: chr  &quot;audi&quot; &quot;audi&quot; &quot;audi&quot; &quot;audi&quot; ...
+##  $ trans       : chr  &quot;auto&quot; &quot;manual&quot; &quot;manual&quot; &quot;auto&quot; ...
+##  $ drv         : chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ cty         : int  18 21 20 21 16 18 18 18 16 20 ...
+##  $ hwy         : int  29 29 31 30 26 26 27 26 25 28 ...</code></pre>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## 
+## 다음의 패키지를 부착합니다: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>mpg1 &lt;- read.csv(&quot;mpg1.csv&quot;, stringsAsFactors = F)
+data2 &lt;- mpg1 %&gt;%
+    select(drv, cty, hwy) %&gt;%
+    filter(drv == &quot;f&quot;)
+
+data3 &lt;- select(mpg1, drv, cty, hwy)
+data3 &lt;- filter(data3, drv ==&quot;f&quot;)</code></pre>
+<pre class="r"><code>count(mpg1, trans)</code></pre>
+<pre><code>##    trans   n
+## 1   auto 157
+## 2 manual  77</code></pre>
+<pre class="r"><code>class(count(mpg1, trans))</code></pre>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<pre class="r"><code>table(mpg1$trans)</code></pre>
+<pre><code>## 
+##   auto manual 
+##    157     77</code></pre>
+<pre class="r"><code>class(table(mpg1$trans))</code></pre>
+<pre><code>## [1] &quot;table&quot;</code></pre>
+<pre class="r"><code>mpg1 %&gt;% filter(manufacturer==&quot;hyundai&quot;) %&gt;% glimpse()</code></pre>
+<pre><code>## Rows: 14
+## Columns: 5
+## $ manufacturer &lt;chr&gt; &quot;hyundai&quot;, &quot;hyundai&quot;, &quot;hyundai&quot;, &quot;hyundai&quot;, &quot;hyundai&quot;, &quot;h…
+## $ trans        &lt;chr&gt; &quot;auto&quot;, &quot;manual&quot;, &quot;auto&quot;, &quot;manual&quot;, &quot;auto&quot;, &quot;manual&quot;, &quot;au…
+## $ drv          &lt;chr&gt; &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f…
+## $ cty          &lt;int&gt; 18, 18, 21, 21, 18, 18, 19, 19, 19, 20, 20, 17, 16, 17
+## $ hwy          &lt;int&gt; 26, 27, 30, 31, 26, 26, 28, 26, 29, 28, 27, 24, 24, 24</code></pre>
+<pre class="r"><code>mpg1 %&gt;% filter(manufacturer==&quot;hyundai&quot; &amp; cty&gt;=16.85897) %&gt;% glimpse()</code></pre>
+<pre><code>## Rows: 13
+## Columns: 5
+## $ manufacturer &lt;chr&gt; &quot;hyundai&quot;, &quot;hyundai&quot;, &quot;hyundai&quot;, &quot;hyundai&quot;, &quot;hyundai&quot;, &quot;h…
+## $ trans        &lt;chr&gt; &quot;auto&quot;, &quot;manual&quot;, &quot;auto&quot;, &quot;manual&quot;, &quot;auto&quot;, &quot;manual&quot;, &quot;au…
+## $ drv          &lt;chr&gt; &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f…
+## $ cty          &lt;int&gt; 18, 18, 21, 21, 18, 18, 19, 19, 19, 20, 20, 17, 17
+## $ hwy          &lt;int&gt; 26, 27, 30, 31, 26, 26, 28, 26, 29, 28, 27, 24, 24</code></pre>
+<pre class="r"><code>mpg1 %&gt;% slice(1,4,5)</code></pre>
+<pre><code>##   manufacturer trans drv cty hwy
+## 1         audi  auto   f  18  29
+## 2         audi  auto   f  21  30
+## 3         audi  auto   f  16  26</code></pre>
+<pre class="r"><code>mpg3 &lt;- mpg1 %&gt;%
+  mutate(total=cty+hwy,
+    mean=(cty+hwy)/2) %&gt;% glimpse()</code></pre>
+<pre><code>## Rows: 234
+## Columns: 7
+## $ manufacturer &lt;chr&gt; &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;…
+## $ trans        &lt;chr&gt; &quot;auto&quot;, &quot;manual&quot;, &quot;manual&quot;, &quot;auto&quot;, &quot;auto&quot;, &quot;manual&quot;, &quot;au…
+## $ drv          &lt;chr&gt; &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;4&quot;, &quot;4&quot;, &quot;4&quot;, &quot;4&quot;, &quot;4…
+## $ cty          &lt;int&gt; 18, 21, 20, 21, 16, 18, 18, 18, 16, 20, 19, 15, 17, 17, 1…
+## $ hwy          &lt;int&gt; 29, 29, 31, 30, 26, 26, 27, 26, 25, 28, 27, 25, 25, 25, 2…
+## $ total        &lt;int&gt; 47, 50, 51, 51, 42, 44, 45, 44, 41, 48, 46, 40, 42, 42, 4…
+## $ mean         &lt;dbl&gt; 23.5, 25.0, 25.5, 25.5, 21.0, 22.0, 22.5, 22.0, 20.5, 24.…</code></pre>
+<pre class="r"><code>mpg2 &lt;- mpg1 %&gt;%
+    mutate(total=cty+hwy) %&gt;% glimpse()</code></pre>
+<pre><code>## Rows: 234
+## Columns: 6
+## $ manufacturer &lt;chr&gt; &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;…
+## $ trans        &lt;chr&gt; &quot;auto&quot;, &quot;manual&quot;, &quot;manual&quot;, &quot;auto&quot;, &quot;auto&quot;, &quot;manual&quot;, &quot;au…
+## $ drv          &lt;chr&gt; &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;4&quot;, &quot;4&quot;, &quot;4&quot;, &quot;4&quot;, &quot;4…
+## $ cty          &lt;int&gt; 18, 21, 20, 21, 16, 18, 18, 18, 16, 20, 19, 15, 17, 17, 1…
+## $ hwy          &lt;int&gt; 29, 29, 31, 30, 26, 26, 27, 26, 25, 28, 27, 25, 25, 25, 2…
+## $ total        &lt;int&gt; 47, 50, 51, 51, 42, 44, 45, 44, 41, 48, 46, 40, 42, 42, 4…</code></pre>
+<pre class="r"><code>mpg1 %&gt;%
+  group_by(trans) %&gt;%
+  summarise(avg     = mean(cty)   
+            , total = sum(cty)
+            , med   = median(cty))</code></pre>
+<pre><code>## # A tibble: 2 × 4
+##   trans    avg total   med
+##   &lt;chr&gt;  &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+## 1 auto    16.0  2507    16
+## 2 manual  18.7  1438    18</code></pre>
+<pre class="r"><code>mpg1 %&gt;% group_by(trans, drv) %&gt;%
+           summarise(m=mean(cty))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;trans&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre><code>## # A tibble: 6 × 3
+## # Groups:   trans [2]
+##   trans  drv       m
+##   &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;
+## 1 auto   4      13.9
+## 2 auto   f      19.1
+## 3 auto   r      13.3
+## 4 manual 4      15.6
+## 5 manual f      21.3
+## 6 manual r      15.8</code></pre>
+<pre class="r"><code>#분류 집단별 데이터 빈도 구하기
+library(dplyr)
+mpg1 %&gt;%
+  group_by(trans, drv) %&gt;%
+  summarise(n=n(),         # count를 써도된다 = count()
+            m=mean(cty))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;trans&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre><code>## # A tibble: 6 × 4
+## # Groups:   trans [2]
+##   trans  drv       n     m
+##   &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;
+## 1 auto   4        75  13.9
+## 2 auto   f        65  19.1
+## 3 auto   r        17  13.3
+## 4 manual 4        28  15.6
+## 5 manual f        41  21.3
+## 6 manual r         8  15.8</code></pre>
+<pre class="r"><code>#분류한 집단별 빈도와 비율 구하기
+mpg1 %&gt;%
+  group_by(trans) %&gt;%    # trans 범주로 분류
+  summarise(n=n()) %&gt;%   # trans 범주별 데이터 빈도 구하기
+  mutate(total=sum(n),   # trans 범주별 빈도의 총계 구하기
+         pct=n/total*100)# trans 범주별 비율 구하기</code></pre>
+<pre><code>## # A tibble: 2 × 4
+##   trans      n total   pct
+##   &lt;chr&gt;  &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+## 1 auto     157   234  67.1
+## 2 manual    77   234  32.9</code></pre>
 
 
 

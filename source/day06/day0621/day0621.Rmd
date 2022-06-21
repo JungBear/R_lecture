@@ -36,4 +36,74 @@ prop.table(b, margin = 2) #열의 합합이 1가 되도록
 round(0.32123141, 2)
 
 round(prop.table(table(mpg1$trans)), 4)
+
 ```
+
+```{r}
+str(mpg1)
+```
+```{r}
+library(dplyr)
+mpg1 <- read.csv("mpg1.csv", stringsAsFactors = F)
+data2 <- mpg1 %>%
+    select(drv, cty, hwy) %>%
+    filter(drv == "f")
+
+data3 <- select(mpg1, drv, cty, hwy)
+data3 <- filter(data3, drv =="f")
+
+
+```
+```{r}
+count(mpg1, trans)
+class(count(mpg1, trans))
+```
+```{r}
+table(mpg1$trans)
+class(table(mpg1$trans))
+```
+```{r}
+mpg1 %>% filter(manufacturer=="hyundai") %>% glimpse()
+mpg1 %>% filter(manufacturer=="hyundai" & cty>=16.85897) %>% glimpse()
+mpg1 %>% slice(1,4,5)
+mpg3 <- mpg1 %>%
+  mutate(total=cty+hwy,
+    mean=(cty+hwy)/2) %>% glimpse()
+mpg2 <- mpg1 %>%
+    mutate(total=cty+hwy) %>% glimpse()
+```
+
+```{r}
+mpg1 %>%
+  group_by(trans) %>%
+  summarise(avg     = mean(cty)   
+            , total = sum(cty)
+            , med   = median(cty))
+
+```
+```{r}
+mpg1 %>% group_by(trans, drv) %>%
+           summarise(m=mean(cty))
+```
+```{r}
+#분류 집단별 데이터 빈도 구하기
+library(dplyr)
+mpg1 %>%
+  group_by(trans, drv) %>%
+  summarise(n=n(),         # count를 써도된다 = count()
+            m=mean(cty))
+
+#분류한 집단별 빈도와 비율 구하기
+mpg1 %>%
+  group_by(trans) %>%    # trans 범주로 분류
+  summarise(n=n()) %>%   # trans 범주별 데이터 빈도 구하기
+  mutate(total=sum(n),   # trans 범주별 빈도의 총계 구하기
+         pct=n/total*100)# trans 범주별 비율 구하기
+```
+
+
+
+
+
+
+
