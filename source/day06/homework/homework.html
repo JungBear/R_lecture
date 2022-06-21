@@ -451,6 +451,69 @@ library(tidyverse)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code>near(1/ 49*49,1)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>#11월 또는 12월에 출발한 모든 항공편
+filter(flights, month == 11 | month == 12)</code></pre>
+<pre><code>## # A tibble: 55,403 × 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;          &lt;int&gt;
+##  1  2013    11     1        5           2359         6      352            345
+##  2  2013    11     1       35           2250       105      123           2356
+##  3  2013    11     1      455            500        -5      641            651
+##  4  2013    11     1      539            545        -6      856            827
+##  5  2013    11     1      542            545        -3      831            855
+##  6  2013    11     1      549            600       -11      912            923
+##  7  2013    11     1      550            600       -10      705            659
+##  8  2013    11     1      554            600        -6      659            701
+##  9  2013    11     1      554            600        -6      826            827
+## 10  2013    11     1      554            600        -6      749            751
+## # … with 55,393 more rows, and 11 more variables: arr_delay &lt;dbl&gt;,
+## #   carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;,
+## #   air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+<pre class="r"><code># x %in% y = x 이거나 y인 모든 행을 선택
+nov_dec &lt;- filter(flights, month %in% c(11, 12))</code></pre>
+<pre class="r"><code>#도착 또는 출발 시 2시간 이상 지연되지 않은 항공편 찾기
+filter(flights, !(arr_delay &gt; 120 | dep_delay &gt; 120))</code></pre>
+<pre><code>## # A tibble: 316,050 × 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;          &lt;int&gt;
+##  1  2013     1     1      517            515         2      830            819
+##  2  2013     1     1      533            529         4      850            830
+##  3  2013     1     1      542            540         2      923            850
+##  4  2013     1     1      544            545        -1     1004           1022
+##  5  2013     1     1      554            600        -6      812            837
+##  6  2013     1     1      554            558        -4      740            728
+##  7  2013     1     1      555            600        -5      913            854
+##  8  2013     1     1      557            600        -3      709            723
+##  9  2013     1     1      557            600        -3      838            846
+## 10  2013     1     1      558            600        -2      753            745
+## # … with 316,040 more rows, and 11 more variables: arr_delay &lt;dbl&gt;,
+## #   carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;,
+## #   air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+<pre class="r"><code>filter(flights, arr_delay &lt;= 120, dep_delay &lt;= 120)</code></pre>
+<pre><code>## # A tibble: 316,050 × 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;          &lt;int&gt;
+##  1  2013     1     1      517            515         2      830            819
+##  2  2013     1     1      533            529         4      850            830
+##  3  2013     1     1      542            540         2      923            850
+##  4  2013     1     1      544            545        -1     1004           1022
+##  5  2013     1     1      554            600        -6      812            837
+##  6  2013     1     1      554            558        -4      740            728
+##  7  2013     1     1      555            600        -5      913            854
+##  8  2013     1     1      557            600        -3      709            723
+##  9  2013     1     1      557            600        -3      838            846
+## 10  2013     1     1      558            600        -2      753            745
+## # … with 316,040 more rows, and 11 more variables: arr_delay &lt;dbl&gt;,
+## #   carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;,
+## #   air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+<pre class="r"><code>###NA값
+###비교를 어렵게 하는 NA
+###값의 누락여부 확인
+x &lt;- NA
+y &lt;- NA
+is.na(x)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>###filter() -&gt; 조건이 TRUE인 행만 포함</code></pre>
 
 
 
