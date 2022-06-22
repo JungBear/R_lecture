@@ -84,6 +84,8 @@ ggplot(diamonds,aes(x=cut, y=price)) + geom_bar(stat="identity")
 #커널밀도곡선
 ggplot(data=diamonds, aes(x=carat))+geom_density()
 
+library(tidyverse)
+
 
 
 
