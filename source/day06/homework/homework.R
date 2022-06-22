@@ -41,5 +41,10 @@ df <- tibble(x = c(1, NA, 3))
 filter(df, x >1)
 filter(df, is.na(x)|x>1)
 
+filter(flights, arr_delay > 120)
+filter(flights, dest == "HOU" | dest == "IAH")
+filter(flights, month == 7, month == 8, month == 9)
+
+arrange(flights, year, month, day)
 
 

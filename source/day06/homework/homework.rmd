@@ -12,11 +12,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(dplyr)
 library(ggplot2)
-install.packages("nycflights13")
 library(nycflights13)
-install.packages("tidyverse")
+
+
 library(tidyverse)
-class(flights)
+
 ```{r}
 library(dplyr)
 library(ggplot2)
@@ -67,6 +67,10 @@ x <- NA
 y <- NA
 is.na(x)
 ###filter() -> 조건이 TRUE인 행만 포함
+### FALSE 및 NA값 제외
+df <- tibble(x = c(1, NA, 3))
+filter(df, x >1)
+filter(df, is.na(x)|x>1)
 
 ```
 
