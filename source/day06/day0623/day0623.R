@@ -632,6 +632,18 @@ seoulair %>%
   arrange(m1)
 
 # 미세먼지 등급 분석           
+seoulair %>% 
+  filter(!is.na(pm10)) %>%                   
+  mutate(pm_grade=ifelse(pm10 <=30, "good",  # pm_grade 변수 만들기
+         ifelse(pm10>=31 &pm10 <= 80, "normal",
+                ifelse(pm10>=81 & pm10<=150, "bad", "worst")))) %>%
+  group_by(pm_grade) %>%
+  summarise(n=n()) %>%                       # 빈도 구하기
+  mutate(total=sum(n),
+         pct=round(n/total*100, 1)) %>%
+  select(pm_grade, n, pct) %>%
+  arrange(desc(n))
+  
 
 
   
