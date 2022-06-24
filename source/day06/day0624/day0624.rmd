@@ -1,0 +1,255 @@
+---
+title: "Day-6"
+output:
+  html_document:
+    toc : true
+    toc_float : true
+    keep_md: true
+date: '2022-06-24'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Statistics
+
+## 추론통계(Inferential Statistics)
+
+### 통계검정
+
+- 평균 차이 검정 : 수치 데이터 + 범주 데이터(두그룹)
+  - 양끝 차이 검정 
+- 비율 차이 검정 : 범주 데이터
+- 상관 관계 : 수치 데이터
+- 회귀
+
+- 통계 검정 사전 준비
+  - 분석을 위한 데이터가 적절한지 검정
+    - 등분산 검정, 수치 데이터가 정규분포를 이루는가(정균성 검정)
+
+- 귀무가설, 대립가설 설정
+  - 귀무가설 : 평균 차이가 없다, p > 0.05
+  - 대립가설 : 평균 차이가 있다, p < 0.05
+
+- 테스트
+  - t.test, chisq.test, cor.test
+    
+### 회귀(별이 5개!)
+- 기초 통계 : 특정한 결과에 영향을 주는 요인을 찾는 것
+- 귀무가설 & 대립가설
+  - 귀무가설 : x(독립변수)가 y(종속변수)에 영향을 주지 않는다.
+  - 대립가설 : x(독립변수)가 y(종속변수)에 영향을 준다
+```{r}
+RA <- lm(data=mtcars, mpg~disp)
+summary(RA)
+```
+
+- lm(종속변수 ~ 독립변수, data)
+  - p.value > 0.05 : 식이 의미가 없다. -> 의미있게 데이터를 가공 -> 데이터삭제 or 데이터수집
+  - 요인의 Intercept(기울기) > 0.05 -> 요인삭제 후 재실행
+  - 컬럼의 t값이 0.05가 넘으면 그 컬럼을 지워본후 실행하고 p값과 t값을 다시 확인한다. -> 반복
+    - 전진선택법
+      - 절편만 있는 상수모형으로부터 시작해 중요하다고 생각되는 설명변수부터 차례로 모형에 추가
+      - 장점 : 이해하기 쉽고 변수의 개수가 많은 경우에도 사용 가능
+      - 단점 : 작은 변동에도 결과가 크게 달라져 안정성 부족
+    - 후진제거법
+      - 모든 독립변수를 포함한 모형에서 출발해 가장 적은 영향을 주는 변수부터 제거하면서 더 이상 제거할 변수가 없을 때까지 진행
+      - 장점 : 전체 변수들의 정보를 이용할수 있다
+      - 단점 : 변수의 개수가 많으면 사용하기 어려움
+```{r}
+##Multiple R-squared:  0.7183,	Adjusted R-squared:  0.709 
+```
+  - R-squared(결정계수) = 설명력 <- 0 ~ 1
+    - 1로 수렴할수록 설명력이 좋다
+    - 결정계수값만큼 결과에 영향을 주는 요인이다.
+      - 1 - 결정계수값의 결과 만큼 다른 요인을 더 찾아야한다.
+
+- 머신러닝, 인공지능 : 예측을 하기위해 
+  - y = ax + b에서 파생되는 것들이 대부분이다.
+  
+## 사례 분석
+- 문제1 : 삶의 만족도와 외로움이 자살충동에 주는 영향
+- 문제2 : 삶의 만족도와 외로움의 상관관계를 알아보기
+- 문제3 : 가족신뢰도, 경제적 안정, 건강상태가 삶의 만족도와 외로움에 주는 영향
+- 문제4 : 성, 연령, 지역에 따라 삶의 만족도에 차이가 있는가
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+#install.packages("foreign")
+library(foreign)
+```
+
+```{r}
+mental = read.spss("data/한국행정연구원_사회통합실태조사_데이터_2019.sav")
+class(mental)
+mental = as.data.frame(mental) # 데이터프레임으로 변경
+class(mental)
+```
+
+### 데이터 가공
+```{r}
+mental <- mental %>%
+  select(q32_2, q1_4, q32_1, q34_1, q52, d17, d1, d2, ara) %>%
+  rename(suicide=q32_2,
+         satisfaction=q1_4,
+         loneliness=q32_1,
+         family_belief=q34_1,
+         wealth=q52,
+         health=d17,
+         sex=d1,
+         age=d2,
+         area=ara
+         ) # 변수 추출 후 변수 이름 변경
+str(mental)
+```
+```{r}
+table(mental$suicide)     # 빈도확인
+table(mental$health)      # 빈도확인
+table(mental$satisfaction)# 빈도확인
+```
+```{r}
+# 문제중 자살충동 = y , 삶의 만족도와 외로움이 변수인데, 삶의 만족도와 외로움에 영향을 주는 변수가 신뢰도, 경제적안정, 건강상태이므로 변수가 6개이다
+mental$suicide <-as.integer(mental$suicide)
+mental$satisfaction <-as.integer(mental$satisfaction)
+mental$loneliness <- as.integer(mental$loneliness)
+mental$family_belief <-as.integer(mental$family_belief)
+mental$wealth <- as.integer(mental$wealth)
+mental$health <- as.integer(mental$health)
+
+table(mental$suicide)
+table(mental$health)
+table(mental$satisfaction)
+
+# 원래는 0점부터 시작하는데 첫 문항을 1로 시작해서 1씩 빼주는 작업
+mental$satisfaction <- mental$satisfaction-1 
+mental$wealth <- mental$wealth-1
+table(mental$satisfaction)
+```
+```{r}
+# sex, age, area의 유형을 범주형에서 문자열로 변경 -> 범주형으로 분석하면 오류가 발생할수 있기 때문
+mental$sex <- as.character(mental$sex)
+mental$age <- as.character(mental$age)
+mental$area <- as.character(mental$area)
+table(mental$sex)
+table(mental$age)
+table(mental$area)
+# age변수에 범주에 20대, 60대가 다른범주와 다른이름으로 나와서 통일시켜준다
+mental$age <- ifelse(mental$age=="19~29세", "20대",
+                     ifelse(mental$age=="60~69세","60대",mental$age))
+summary(mental) # 결측치, 이상치 확인
+```
+
+### 데이터 분석
+- 연구할 때는 우선 인구사회적 변수의 빈도분석(빈도와 비율확인)
+```{r}
+# 성별 빈도분석
+mental %>%
+  group_by(sex) %>%                 
+  summarise(n=n()) %>%              # sex변수의 범주별 빈도
+  mutate(total=sum(n),              # sex변수의 빈도총계
+         pct=round(n/total*100, 1)) # sex변수의 범주별 비율 
+
+# 연령대별 빈도분석
+mental %>%
+  group_by(age) %>%
+  summarise(n=n()) %>%
+  mutate(total=sum(n),
+         pct=round(n/total*100, 1))
+# 성별, 연령대 고르게 분포되어있는 것을 볼 수 있다.
+
+# 교차분석 - 성별로 연령대가 고르게 분포되어 있는가
+table(mental$sex, mental$age)
+# 성과 연령대의 교차 백분율 구하기, 행별로 100%기준, 소수점한자리
+round(prop.table(table(mental$sex, mental$age),1)*100,1) 
+
+chisq.test(mental$sex, mental$age)
+# p <0.05  ->  분포의 차이가 있다.
+
+#평균분석(suicide, satisfaction, loneliness, family_belief, wealth, health)
+mental %>%
+  summarise(m1=mean(suicide), m2=mean(satisfaction), m3=mean(loneliness), 
+            m4= mean(family_belief), m5=mean(wealth), m6=mean(health))
+
+```
+
+- 문제1 : 삶의 만족도와 외로움이 자살충동에 미치는 영향
+  - 삶의 만족도 와 외로움 = 독립변수
+  - 자살충동 = 종속변수
+```{r}
+# 다중회귀분석
+RA <- lm(data = mental, suicide ~ satisfaction + loneliness)
+summary(RA)
+```
+  - p < 0.001로 적합
+  - 회귀식 : 1.035551-0.052583*satisfaction+0.367405*loneliness
+  - t < 0.001
+  - 설명력 : 0.2668
+
+- 문제2 : 삶의 만족도와 외로움의 상관관계
+```{r}
+cor.test(mental$satisfaction, mental$loneliness)
+```
+  - r=-0.27이므로 삶의 만족도와 외로움은 약한 부정의 관계이다
+- 문제3 : 가족신뢰도, 경제안정도, 건강상태가 삶의 만족도와 외로움에 미치는 영향
+  - 가족신뢰도, 경제안정도, 건강상태 : 독립변수
+  - 삶의 만족도, 외로움 : 종속 변수
+```{r}
+RA <- lm(data = mental, satisfaction ~ family_belief+wealth+health)
+summary(RA)
+```
+  - p < 0.001
+  - t < 0.001 (유의수준)
+  - 회귀식 : 2.07613+0.36851*family_belief+0.26016*wealth+0.36403*health
+  - 영향력 : 가족신뢰도 > 경제안정도 > 건강상태
+  - 설명력 : 0.1386
+```{r}
+RA <- lm(data = mental, loneliness ~ family_belief+wealth+health)
+summary(RA)
+```
+  - p < 0.001
+  - t < 0.001
+  - 회귀식 : 3.652247-0.220274*family_belief-0.072686*wealth-0.191313*health
+  - 영향력 : 가족신뢰도 > 건강상태 > 경제안정도
+  - 설명력 : 0.1157
+- 문제4 : 성, 연령, 지역별 삶의 만족도차이
+  - 성별 삶의 만족도 차이
+```{r}
+t.test(data=mental, satisfaction~sex) 
+```
+    - p < 0.001
+    - 남성의 만족도 < 여성의 만족도
+  - 연령대별 삶의 만족도 차이
+```{r}
+mental %>%
+  group_by(age) %>%
+  summarise(m=mean(satisfaction)) %>%
+  arrange(desc(m))
+```
+    - 30대가 제일 높고 60대가 제일 낮다
+  - 지역별 삶의 만족도 분석과 그래프 그리기
+```{r}
+area_satisfaction <- mental %>%
+  group_by(area) %>%
+  summarise(m=mean(satisfaction)) %>%
+  arrange(desc(m))
+str(area_satisfaction)
+
+ggplot(data=area_satisfaction, aes(x=reorder(area,m),y=m,)) +
+  geom_col() +
+  labs(
+    title = "지역별 만족도",
+    x = "지역",
+    y = "만족도",
+  ) + coord_flip()
+```
+
+
+
+
+
